@@ -1,0 +1,99 @@
+<body>
+  <div class="container">
+
+    <aside class="sidebar">
+      <h2 class="logo">StockX</h2>
+      <nav>
+        <ul>
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Itens</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <h1>Bem-vindo ao StockX</h1>
+
+      <div class="resumo">
+        <div class="resumo-card">
+          <h2>Total de Itens</h2>
+          <p>{{ resumo.totalItens }}</p>
+        </div>
+
+        <div class="resumo-card">
+          <h2>Valor Total em Estoque</h2>
+          <p>R$ {{ resumo.totalValor.toFixed(2) }}</p>
+        </div>
+      </div>
+
+      <div 
+  class="mensagem-flutuante" 
+  [ngClass]="{
+    'alerta': tipoMensagem === 'alerta',
+    'normal': tipoMensagem === 'normal'
+  }"
+  *ngIf="mostrarMensagem"
+>
+  {{ mensagemFlutuante }}
+</div>
+
+<div *ngIf="mostrarConfirmacaoExcluir" class="confirmacao-flutuante-backdrop">
+  <div class="confirmacao-flutuante">
+    <p>Tem certeza que deseja excluir este produto?</p>
+    <button class="btn-sim" (click)="confirmarExclusao()">Sim</button>
+    <button class="btn-nao" (click)="cancelarExclusao()">Não</button>
+  </div>
+</div>
+
+      <!-- FILTRO E BOTÃO NOVO PRODUTO -->
+      <!-- Container flexível com filtro e botão -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+  
+  <input
+    type="text"
+    placeholder="Filtrar produtos..."
+    [(ngModel)]="filtro"
+    (ngModelChange)="filtrarProdutos()"
+    style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; width: 250px;"
+  />
+
+  <div class="botao-novo-produto-container">
+    <button (click)="abrirCriarProduto()">+ Novo Produto</button>
+  </div>
+  
+</div>
+
+
+      <!-- TABELA -->
+      <table class="tabela-produtos">
+        <thead>
+          <tr>
+            
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Quantidade</th>
+            <th>Preço (R$)</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of produtosFiltrados" [ngClass]="{'estoque-baixo': product.quantity <= 1}">
+            <td data-label="ID">{{ product.id }}</td>
+            <td data-label="Nome">{{ product.name }}</td>
+            <td data-label="Quantidade">{{ product.quantity }}</td>
+            <td data-label="Preço (R$)">{{ product.price.toFixed(2) }}</td>
+            <td data-label="Ações">
+              <button (click)="editarProduto(product)">Editar</button>
+              <button (click)="exibirConfirmacaoExcluir(product.id)">Excluir</button>
+
+            </td>
+          </tr>
+          <tr *ngIf="produtosFiltrados.length === 0" class="mensagem-vazia">
+  <td colspan="5">Nenhum produto cadastrado!</td>
+</tr>
+
+        </tbody>
+      </table>
+    </main>
+  </div>
+</body>

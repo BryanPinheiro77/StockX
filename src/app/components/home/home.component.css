@@ -1,0 +1,416 @@
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #e3f2fd, #fce4ec);
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 260px;
+  background-color: #1f2937;
+  color: #ffffff;
+  padding: 30px 20px;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.5s ease forwards;
+  opacity: 1;
+  transform: translateX(0);
+  z-index: 1000;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sidebar .logo {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #60a5fa;
+  text-align: center;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar nav ul li {
+  margin: 18px 0;
+}
+
+.sidebar nav ul li a {
+  color: #e5e7eb;
+  font-size: 18px;
+  text-decoration: none;
+  font-weight: 600;
+  display: block;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.sidebar nav ul li a:hover {
+  background-color: #374151;
+  transform: scale(1.05);
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 40px 40px 40px 300px;
+  background-color: #f9fafb;
+  overflow-y: auto;
+}
+
+/* Animação para o título principal */
+.main-content h1 {
+    padding-left: 10px;
+  font-size: 36px;
+  font-weight: 700;
+  color: #1f2937;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlideUpTitle 0.6s ease forwards;
+  animation-delay: 0.1s;
+  margin-bottom: 25px;
+}
+
+@keyframes fadeSlideUpTitle {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animação cards - fade in e slide up */
+.resumo {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.resumo-card {
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.12);
+  flex: 1;
+  min-width: 220px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlideUp 0.5s forwards;
+  animation-delay: 0.3s;
+}
+
+.resumo-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Aparecer com delay em cascata */
+.resumo-card:nth-child(1) {
+  animation-delay: 0.3s;
+}
+.resumo-card:nth-child(2) {
+  animation-delay: 0.5s;
+}
+.resumo-card:nth-child(3) {
+  animation-delay: 0.7s;
+}
+
+@keyframes fadeSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY();
+  }
+}
+
+.resumo-card h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  color: #555;
+}
+
+.resumo-card p {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0;
+  color: #007BFF;
+}
+
+/* Botão Novo Produto */
+.botao-novo-produto-container {
+  text-align: right;
+  margin: 30px 0 10px;
+}
+
+.botao-novo-produto-container button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  animation: fadeIn 0.8s ease forwards;
+  opacity: 0;
+}
+
+.botao-novo-produto-container button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Tabela de Produtos */
+.tabela-produtos {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  font-size: 16px;
+  background-color: transparent;
+  animation: fadeIn 1s ease forwards;
+  opacity: 0;
+}
+
+.tabela-produtos thead tr {
+  background-color: #007BFF;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+}
+
+.tabela-produtos thead th {
+  padding: 14px 18px;
+  border-radius: 8px 8px 0 0;
+}
+
+.tabela-produtos tbody tr {
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.4s ease;
+  cursor: default;
+  border-radius: 10px;
+  overflow: hidden; 
+   
+}
+
+.tabela-produtos tbody tr:hover {
+  background-color: #eef4ff;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.50);
+}
+
+.tabela-produtos tbody td {
+  padding: 14px 18px;
+  color: #000000;
+  vertical-align: middle;
+  background-color: transparent;
+}
+
+.tabela-produtos tbody tr td:first-child {
+  border-radius: 8px 0 0 8px; /* arredonda só os cantos da esquerda */
+}
+
+.tabela-produtos tbody tr td:last-child {
+  border-radius: 0 8px 8px 0; /* arredonda só os cantos da direita */
+}
+
+/* Botões dentro da tabela */
+.tabela-produtos button {
+  padding: 8px 14px;
+  margin-right: 2px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.15s ease;
+}
+
+.tabela-produtos button:first-child {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.tabela-produtos button:first-child:hover {
+  background-color: #138496;
+  transform: scale(1.05);
+}
+
+.tabela-produtos button:last-child {
+  background-color: #dc3545;
+  color: white;
+}
+
+.tabela-produtos button:last-child:hover {
+  background-color: #b52b39;
+  transform: scale(1.05);
+}
+
+.mensagem-flutuante {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #333;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-size: 18px;
+  z-index: 9999;
+  opacity: 0.95;
+  animation: fadeInOut 2.5s ease-in-out;
+}
+
+
+
+.mensagem-flutuante.alerta {
+  background: #f44336 !important; /* vermelho */
+  margin: 40px;
+  text-align: center;
+  top: 20px;
+  right: 20px;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -60%); }
+  10% { opacity: 1; transform: translate(-50%, -50%); }
+  90% { opacity: 1; transform: translate(-50%, -50%); }
+  100% { opacity: 0; transform: translate(-50%, -40%); }
+}
+
+
+@keyframes abrirConfirmacao {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.confirmacao-flutuante {
+  /* Mantém os estilos que já tinha */
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  text-align: center;
+  max-width: 320px;
+  font-size: 16px;
+
+  /* Nova linha para animação */
+  animation: abrirConfirmacao 0.3s ease forwards;
+}
+
+.confirmacao-flutuante-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 9998;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmacao-flutuante {
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  text-align: center;
+  max-width: 320px;
+  font-size: 16px;
+
+  animation: abrirConfirmacao 0.3s ease forwards;
+}
+
+.confirmacao-flutuante button {
+  margin: 10px 15px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+   width: 100px;
+}
+
+/* Botão "Sim" */
+.btn-sim {
+  background-color: #e74c3c; /* vermelho */
+  color: white;
+}
+
+.btn-sim:hover {
+  background-color: #962b1f; /* vermelho mais escuro no hover */
+}
+
+/* Botão "Não" */
+.btn-nao {
+  background-color: #bdc3c7; /* cinza */
+  color: black;
+  width: 100px;
+}
+
+.btn-nao:hover {
+  background-color: #a9a9a9; /* cinza mais escuro no hover */
+}
+
+.mensagem-vazia {
+  text-align: center;
+  opacity: 0.6;
+  font-style: italic;
+  font-size: 1.1em;
+  height: 60px;
+}
+
+.mensagem-vazia td {
+  padding: 20px;
+}
+
+.estoque-baixo {
+  background-color: #a84d4d !important; /* vermelho claro para fundo */
+  color: #000000 !important; /* texto vermelho escuro */
+  font-weight: 700 !important;
+}
+
+.estoque-baixo:hover {
+  background-color: #a84d4d !important; /* vermelho claro para fundo */
+  color: #000000 !important; /* texto vermelho escuro */
+  font-weight: 700 !important;
+}
