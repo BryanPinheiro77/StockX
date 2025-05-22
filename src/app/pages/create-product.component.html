@@ -11,25 +11,40 @@
   <h2 class="form-title">Novo Produto</h2>
 
   <form (ngSubmit)="salvarProduto()" #form="ngForm" class="form-box">
-    <div class="form-group">
-      <label for="name">Nome:</label>
-      <input type="text" id="name" [(ngModel)]="produto.name" name="name" required>
-    </div>
+  <div class="form-group">
+    <label for="name">Nome:</label>
+    <input type="text" id="name" [(ngModel)]="produto.name" name="name" required>
+  </div>
 
-    <div class="form-group">
-      <label for="quantity">Quantidade:</label>
-      <input type="number" id="quantity" [(ngModel)]="produto.quantity" name="quantity" required>
-    </div>
+  <div class="form-group">
+    <label for="quantity">Quantidade:</label>
+    <input type="number" id="quantity" [(ngModel)]="produto.quantity" name="quantity" required>
+  </div>
 
-    <div class="form-group">
-      <label for="price">Preço (R$):</label>
-      <input type="number" step="0.01" id="price" [(ngModel)]="produto.price" name="price" required>
-    </div>
+  <div class="form-group">
+    <label for="price">Preço (R$):</label>
+    <input type="number" step="0.01" id="price" [(ngModel)]="produto.price" name="price" required>
+  </div>
 
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Salvar</button>
-      <button type="button" (click)="voltar()" class="btn btn-secondary">Cancelar</button>
-    </div>
-  </form>
+  <div class="form-group">
+  <label for="category">Categoria:</label>
+  <select id="category" [(ngModel)]="produto.category" name="category" required>
+    <option value="" disabled selected>Selecione uma categoria</option>
+    <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+  </select>
+</div>
+
+
+  <div class="form-group">
+    <label for="cost">Custo (R$):</label>
+    <input type="number" step="0.01" id="cost" [(ngModel)]="produto.cost" name="cost" required>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <button type="button" (click)="voltar()" class="btn btn-secondary">Cancelar</button>
+  </div>
+</form>
+
 </div>
 </body>

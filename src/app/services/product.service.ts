@@ -1,77 +1,71 @@
 import { Injectable } from '@angular/core';
+import { Firestore, collection, collectionData, doc, docData, addDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
 import { Product } from '../models/product.model';
-
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private key = 'estoque_produtos';
 
-  getAll(): Product[] {
-  const data = localStorage.getItem(this.key);
-  console.log('🔍 Dados brutos do localStorage:', data); // <--- AQUI
-  const produtos = data ? JSON.parse(data) : [];
-  console.log('📦 Produtos convertidos:', produtos);     // <--- E AQUI
-  return produtos;
+  constructor(
+    private firestore: Firestore,
+    private auth: Auth
+  ) {}
+
+  // Pega o uid do usuário logado
+  private async getUserId(): Promise<string> {
+    const user = this.auth.currentUser;
+    if (!user) throw new Error('Usuário não autenticado');
+    return user.uid;
+  }
+
+  async getResumo(): Promise<{ totalItens: number, totalValor: number, totalCusto: number }> {
+  const produtos = await this.getAll();
+  const totalItens = produtos.reduce((sum, p) => sum + (p.quantity ?? 0), 0);
+  const totalValor = produtos.reduce((sum, p) => sum + (p.quantity ?? 0) * (p.price ?? 0), 0);
+  const totalCusto = produtos.reduce((sum, p) => sum + (p.quantity ?? 0) * (p.cost ?? 0), 0);
+  return { totalItens, totalValor, totalCusto };
 }
 
 
-  saveAll(products: Product[]) {
-    localStorage.setItem(this.key, JSON.stringify(products));
+  // Busca todos produtos do usuário
+  async getAll(): Promise<Product[]> {
+    const userId = await this.getUserId();
+    const produtosRef = collection(this.firestore, `usuarios/${userId}/produtos`);
+    const produtos = await firstValueFrom(collectionData(produtosRef, { idField: 'id' })) as Product[];
+    return produtos;
   }
 
-  private getNextId(): number {
-    const produtos = this.getAll();
-    if (produtos.length === 0) return 1;
-    // pega o maior id já existente e soma 1
-    const maxId = produtos.reduce((max, p) => p.id > max ? p.id : max, 0);
-    return maxId + 1;
+  // Adiciona produto sem o campo id (Firestore gera)
+  async add(product: Omit<Product, 'id'>): Promise<void> {
+    const userId = await this.getUserId();
+    const produtosRef = collection(this.firestore, `usuarios/${userId}/produtos`);
+    await addDoc(produtosRef, product);
   }
 
-  add(product: Product) {
-    const produtos = this.getAll();
-    product.id = this.getNextId();  // usa id sequencial
-    produtos.push(product);
-    this.saveAll(produtos);
+  // Busca produto por id
+  async getProductById(id: string): Promise<Product | undefined> {
+    const userId = await this.getUserId();
+    const produtoDocRef = doc(this.firestore, `usuarios/${userId}/produtos/${id}`);
+    const produto = await firstValueFrom(docData(produtoDocRef, { idField: 'id' })) as Product | undefined;
+    return produto;
   }
 
- getProductById(id: number): Product | undefined {
-  const produtos = this.getAll();
-  return produtos.find(p => p.id === id);
-}
-
-updateProduct(updated: Product) {
-  let produtos = this.getAll();
-  produtos = produtos.map(p => p.id === updated.id ? updated : p);
-  this.saveAll(produtos);
-}
-
-  delete(id: number) {
-    const produtos = this.getAll().filter(p => p.id !== id);
-    this.saveAll(produtos);
+  // Atualiza produto pelo id
+  async updateProduct(product: Product): Promise<void> {
+    if (!product.id) throw new Error('Produto sem ID');
+    const userId = await this.getUserId();
+    const produtoDocRef = doc(this.firestore, `usuarios/${userId}/produtos/${product.id}`);
+    await updateDoc(produtoDocRef, { ...product });
   }
 
-  getResumo() {
-    const produtos = this.getAll();
-    const totalItens = produtos.reduce((acc, p) => acc + p.quantity, 0);
-    const totalValor = produtos.reduce((acc, p) => acc + p.quantity * p.price, 0);
-    return { totalItens, totalValor };
+  // Deleta produto pelo id
+  async delete(id: string): Promise<void> {
+    const userId = await this.getUserId();
+    const produtoDocRef = doc(this.firestore, `usuarios/${userId}/produtos/${id}`);
+    await deleteDoc(produtoDocRef);
   }
-
-  seedData() {
-  const produtos = this.getAll();
-  if (produtos.length === 0) {
-    const iniciais: Product[] = [
-      { id: 1, name: 'Mouse Gamer', quantity: 10, price: 120 },
-      { id: 2, name: 'Teclado Mecânico', quantity: 5, price: 280 },
-      { id: 3, name: 'Monitor 24', quantity: 2, price: 900 },
-    ];
-    this.saveAll(iniciais);
-    console.log('✅ Produtos iniciais adicionados!');
-  } else {
-    console.log('ℹ️ Já existem produtos. Seed não necessário.');
-  }
-}
 
 }

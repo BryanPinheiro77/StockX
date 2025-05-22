@@ -14,12 +14,14 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./edit-product.component.css']
 })
 export class EditProductComponent implements OnInit {
-  id!: number;
+  id!: string;  // mudou para string
   produto: Product = {
-    id: 0,
+    id: '',
     name: '',
     quantity: 0,
-    price: 0
+    price: 0,
+    cost: 0,       // se o seu Product model tem cost e category, inclua aqui
+    category: ''
   };
 
   constructor(
@@ -29,8 +31,17 @@ export class EditProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.id = +this.route.snapshot.paramMap.get('id')!;
-    const prod = this.productService.getProductById(this.id);
+    this.id = this.route.snapshot.paramMap.get('id') || '';
+    if (this.id) {
+      this.loadProduct();
+    } else {
+      alert('ID inválido!');
+      this.router.navigate(['/']);
+    }
+  }
+
+  async loadProduct() {
+    const prod = await this.productService.getProductById(this.id);
     if (prod) {
       this.produto = { ...prod };
     } else {
@@ -40,35 +51,31 @@ export class EditProductComponent implements OnInit {
   }
 
   atualizarProduto(): void {
-  this.productService.updateProduct(this.produto);
-
-  let mensagemEstoqueBaixo = '';
-  if (this.produto.quantity <= 2) {
-    mensagemEstoqueBaixo = `⚠ Estoque baixo: "${this.produto.name}" tem apenas ${this.produto.quantity} unidade(s)!`;
+    this.productService.updateProduct(this.produto);
+    let mensagemEstoqueBaixo = '';
+    if (this.produto.quantity <= 2) {
+      mensagemEstoqueBaixo = `⚠ Estoque baixo: "${this.produto.name}" tem apenas ${this.produto.quantity} unidade(s)!`;
+    }
+    this.exibirMensagem('Produto atualizado com sucesso!');
+    setTimeout(() => {
+      this.router.navigate(['/'], {
+        state: { mensagemEstoqueBaixo }
+      });
+    }, 1100);
   }
-
-  this.exibirMensagem('Produto atualizado com sucesso!');
-
-  setTimeout(() => {
-    this.router.navigate(['/'], {
-      state: { mensagemEstoqueBaixo }  // 👈 envia para o componente da home
-    });
-  }, 1100);
-}
-
 
   cancelar() {
     this.router.navigate(['/']);
   }
 
   mensagemFlutuante: string = '';
-mostrarMensagem = false;
+  mostrarMensagem = false;
 
-exibirMensagem(texto: string, duracaoMs: number = 2500) {
-  this.mensagemFlutuante = texto;
-  this.mostrarMensagem = true;
-  setTimeout(() => {
-    this.mostrarMensagem = false;
-  }, duracaoMs);
-}
+  exibirMensagem(texto: string, duracaoMs: number = 2500) {
+    this.mensagemFlutuante = texto;
+    this.mostrarMensagem = true;
+    setTimeout(() => {
+      this.mostrarMensagem = false;
+    }, duracaoMs);
+  }
 }

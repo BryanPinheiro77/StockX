@@ -1,14 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Import para ngModel
+import { FormsModule } from '@angular/forms'; 
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { Router } from '@angular/router';
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
+
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],  // importante importar FormsModule para ngModel funcionar
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -18,33 +22,59 @@ export class HomeComponent implements OnInit {
   produtosFiltrados: Product[] = [];
   filtro: string = '';
 
-  constructor(private productService: ProductService, private router: Router) {}
+  nomeEmpresa: string = '';  // variável para nome da empresa
 
-  ngOnInit(): void {
-  this.productService.seedData();
-  this.atualizarDados();
+  mensagemFlutuante: string = '';
+  mostrarMensagem = false;
+  tipoMensagem: 'normal' | 'alerta' = 'normal';
 
-  const estado = history.state?.mensagemEstoqueBaixo;
-if (estado) {
-  this.exibirMensagem(estado, 'alerta');
+  // id do produto para exclusão (string, pois id do produto é string)
+  idProdutoParaExcluir: string | null = null;
+  mostrarConfirmacaoExcluir = false;
 
-  // Limpa o estado para não repetir na próxima recarga
-  history.replaceState({}, '', location.pathname);
-} else {
-  const produtosComEstoqueBaixo = this.produtos.filter(p => p.quantity <= 2);
-  if (produtosComEstoqueBaixo.length > 0) {
-    const nomes = produtosComEstoqueBaixo.map(p => `"${p.name}"`).join(', ');
-    const texto = `⚠ Produtos com estoque muito baixo: ${nomes}`;
-    this.exibirMensagem(texto, 'alerta', 2500);
+  constructor(
+    private productService: ProductService,
+    private router: Router,
+    private firestore: Firestore,
+    private auth: Auth
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    // observar autenticação do usuário
+    onAuthStateChanged(this.auth, async (user) => {
+      if (user) {
+        const docRef = doc(this.firestore, `usuarios/${user.uid}`);
+        const snapshot = await getDoc(docRef);
+        if (snapshot.exists()) {
+          const data = snapshot.data();
+          this.nomeEmpresa = data['nomeEmpresa'] || '';
+          console.log('nomeEmpresa:', this.nomeEmpresa);
+        }
+
+        await this.atualizarDados();
+
+        const estado = history.state?.mensagemEstoqueBaixo;
+        if (estado) {
+          this.exibirMensagem(estado, 'alerta');
+          history.replaceState({}, '', location.pathname);
+        }
+      }
+    });
   }
-}
 
-}
+  async atualizarDados() {
+    this.produtos = await this.productService.getAll();
+    this.produtosFiltrados = [...this.produtos];
+    const resumo = await this.productService.getResumo();
+    this.resumo = resumo;
 
-  atualizarDados() {
-    this.resumo = this.productService.getResumo();
-    this.produtos = this.productService.getAll();
-    this.produtosFiltrados = [...this.produtos];  // copia inicial
+    // Verifica produtos com estoque baixo
+    const produtosComEstoqueBaixo = this.produtos.filter(p => (p.quantity || 0) <= 2);
+    if (produtosComEstoqueBaixo.length > 0) {
+      const nomes = produtosComEstoqueBaixo.map(p => `"${p.name}"`).join(', ');
+      const texto = `⚠ Produtos com estoque muito baixo: ${nomes}`;
+      this.exibirMensagem(texto, 'alerta', 2500);
+    }
   }
 
   filtrarProdutos() {
@@ -54,59 +84,49 @@ if (estado) {
     );
   }
 
-  excluirProduto(id: number) {
-    if (confirm('Tem certeza que deseja excluir este produto?')) {
-      this.productService.delete(id);
-      this.atualizarDados();
-      this.filtrarProdutos(); // atualiza filtro após exclusão
-       this.exibirMensagem('Produto excluído com sucesso!');
-    }
+  
+
+  // Método chamado direto na confirmação sem prompt nativo
+  exibirConfirmacaoExcluir(id: string) {
+    this.idProdutoParaExcluir = id;
+    this.mostrarConfirmacaoExcluir = true;
   }
 
+  cancelarExclusao() {
+    this.idProdutoParaExcluir = null;
+    this.mostrarConfirmacaoExcluir = false;
+  }
+
+  async confirmarExclusao() {
+  if (this.idProdutoParaExcluir !== null) {
+    try {
+      await this.productService.delete(this.idProdutoParaExcluir);
+      await this.atualizarDados();
+      this.filtrarProdutos();
+      this.exibirMensagem('Produto excluído com sucesso!');
+    } catch (error) {
+      this.exibirMensagem('Erro ao excluir o produto.', 'alerta');
+      console.error('Erro ao excluir produto:', error);
+    }
+  }
+  this.cancelarExclusao();
+}
+
   editarProduto(produto: Product) {
-      this.router.navigate(['/editar-produto', produto.id]);
+    this.router.navigate(['/editar-produto', produto.id]);
   }
 
   abrirCriarProduto() {
     this.router.navigate(['/novo-produto']);
   }
 
-  mensagemFlutuante: string = '';
-mostrarMensagem = false;
-tipoMensagem: 'normal' | 'alerta' = 'normal';
+  exibirMensagem(texto: string, tipo: 'normal' | 'alerta' = 'normal', duracaoMs: number = 2500) {
+    this.mensagemFlutuante = texto;
+    this.tipoMensagem = tipo;
+    this.mostrarMensagem = true;
 
-exibirMensagem(texto: string, tipo: 'normal' | 'alerta' = 'normal', duracaoMs: number = 2500) {
-  this.mensagemFlutuante = texto;
-  this.tipoMensagem = tipo;
-  this.mostrarMensagem = true;
-
-  setTimeout(() => {
-    this.mostrarMensagem = false;
-  }, duracaoMs);
-}
-
-// Variáveis para controlar o diálogo de confirmação
-idProdutoParaExcluir: number | null = null;
-mostrarConfirmacaoExcluir = false;
-
-exibirConfirmacaoExcluir(id: number) {
-  this.idProdutoParaExcluir = id;
-  this.mostrarConfirmacaoExcluir = true;
-}
-
-cancelarExclusao() {
-  this.idProdutoParaExcluir = null;
-  this.mostrarConfirmacaoExcluir = false;
-}
-
-confirmarExclusao() {
-  if (this.idProdutoParaExcluir !== null) {
-    this.productService.delete(this.idProdutoParaExcluir);
-    this.atualizarDados();
-    this.filtrarProdutos();
-    this.exibirMensagem('Produto excluído com sucesso!');
+    setTimeout(() => {
+      this.mostrarMensagem = false;
+    }, duracaoMs);
   }
-  this.cancelarExclusao();
-}
-
 }

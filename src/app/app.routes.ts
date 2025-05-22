@@ -1,19 +1,31 @@
-import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { CreateProductComponent } from './pages/create-product.component';
 import { EditProductComponent } from './pages/edit/edit-product/edit-product.component';
+import { LoginComponent } from './pages/login/login.component';
+import { authGuard } from './guards/auth.guard';
+import { RegisterComponent } from './pages/register/register.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+
 
 export const routes: Routes = [
-    {
-    path: "",
-    component: HomeComponent
-    },
-    { path: 'novo-produto',
-        component: CreateProductComponent
-    },
-    {
-        path: 'editar-produto/:id',
-        component: EditProductComponent
-    }
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'recuperar-senha', component: ResetPasswordComponent },
+
+  {
+    path: '',
+    component: HomeComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'novo-produto',
+    component: CreateProductComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'editar-produto/:id',
+    component: EditProductComponent,
+    canActivate: [authGuard]
+  }
 ];
