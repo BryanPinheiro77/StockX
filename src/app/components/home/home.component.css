@@ -159,13 +159,11 @@ body {
   color: #007BFF;
 }
 
-/* Botão Novo Produto */
-.botao-novo-produto-container {
-  text-align: right;
-  margin: 30px 0 10px;
-}
 
-.botao-novo-produto-container button {
+
+/* Botão Primário */
+.btn-primary {
+  margin-top: 45px;
   background-color: #007BFF;
   color: white;
   border: none;
@@ -180,9 +178,30 @@ body {
   opacity: 0;
 }
 
-.botao-novo-produto-container button:hover {
+.btn-primary:hover {
   background-color: #0056b3;
   transform: scale(1.05);
+}
+
+.btn-secondary {
+  background-color: #6c757d; /* cinza médio */
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  margin-left: 10px; /* Espaçamento entre os botões */
+}
+
+/* Efeito hover */
+.btn-secondary:hover {
+  background-color: #5a6268; /* tom um pouco mais escuro */
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(90, 98, 104, 0.5);
 }
 
 @keyframes fadeIn {

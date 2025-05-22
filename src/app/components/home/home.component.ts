@@ -116,6 +116,11 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/editar-produto', produto.id]);
   }
 
+  abrirNovaCategoria() {
+  // Pode abrir modal ou navegar para página /categoria-nova
+  this.router.navigate(['/nova-categoria']);
+}
+
   abrirCriarProduto() {
     this.router.navigate(['/novo-produto']);
   }

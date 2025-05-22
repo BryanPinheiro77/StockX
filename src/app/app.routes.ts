@@ -6,16 +6,23 @@ import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { RegisterComponent } from './pages/register/register.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
-
+import { NovaCategoriaComponent } from './pages/nova-categoria/nova-categoria.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'recuperar-senha', component: ResetPasswordComponent },
 
+  
   {
     path: '',
     component: HomeComponent,
+    canActivate: [authGuard]
+  },
+
+  { path: 'nova-categoria', 
+    component:
+     NovaCategoriaComponent,
     canActivate: [authGuard]
   },
   {

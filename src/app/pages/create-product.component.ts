@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
+import { CategoryService } from '../services/category.service';
 @Component({
   selector: 'app-create-product',
   standalone: true,
@@ -21,14 +22,7 @@ export class CreateProductComponent {
     cost: 0,
   };
 
-  categorias: string[] = [
-  'Radiador',
-  'Mangueira',
-  'Aditivo',
-  'Ventoinha',
-  'Reservatório',
-  'Peça Genérica'
-];
+  categorias: string[] = [];
 
   mensagemFlutuante: string = '';
   mostrarMensagem: boolean = false;
@@ -36,8 +30,22 @@ export class CreateProductComponent {
 
   constructor(
     private productService: ProductService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private categoryService: CategoryService
+  ) {
+    this.carregarCategorias();
+  }
+
+  carregarCategorias() {
+     this.categoryService.getCategorias().subscribe({
+      next: (categorias) => {
+        this.categorias = categorias;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar categorias:', error);
+      }
+    });
+  }
 
   async salvarProduto() {
     try {
