@@ -85,18 +85,27 @@ body {
   color: #333;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
   padding: 10px;
   border: 2px solid #dee2e6;
   border-radius: 8px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   font-size: 16px;
+  background-color: white;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
   border-color: #007bff;
   outline: none;
   box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15);
+}
+
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .form-actions {

@@ -49,7 +49,7 @@ export class RegisterComponent {
     this.authService.register(email, password)
       .then((cred) => {
         // Salvar nomeEmpresa no Firestore
-        return setDoc(doc(this.firestore, 'users', cred.user.uid), {
+        return setDoc(doc(this.firestore, 'usuarios', cred.user.uid), {
           email,
           nomeEmpresa,
           criadoEm: new Date()

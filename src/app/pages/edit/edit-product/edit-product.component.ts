@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';  // IMPORTAR FormsModule
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product.model';
 import { CommonModule } from '@angular/common';
+import { CategoryService } from '../../../services/category.service';
 
 
 @Component({
@@ -24,11 +25,18 @@ export class EditProductComponent implements OnInit {
     category: ''
   };
 
+  categorias: string[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private categoryService: CategoryService
+  ) {
+    this.carregarCategorias();
+  }
+
+  
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') || '';
@@ -39,6 +47,18 @@ export class EditProductComponent implements OnInit {
       this.router.navigate(['/']);
     }
   }
+
+  carregarCategorias() {
+     this.categoryService.getCategorias().subscribe({
+      next: (categorias) => {
+        this.categorias = categorias;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar categorias:', error);
+      }
+    });
+  }
+
 
   async loadProduct() {
     const prod = await this.productService.getProductById(this.id);
