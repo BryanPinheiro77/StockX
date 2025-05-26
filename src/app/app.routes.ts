@@ -7,6 +7,7 @@ import { authGuard } from './guards/auth.guard';
 import { RegisterComponent } from './pages/register/register.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { NovaCategoriaComponent } from './pages/nova-categoria/nova-categoria.component';
+import { ProductsComponent } from './pages/products/products.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -20,11 +21,18 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
+    {
+    path: 'produtos',
+    component: ProductsComponent,
+    canActivate: [authGuard]
+  },
+
   { path: 'nova-categoria', 
     component:
      NovaCategoriaComponent,
     canActivate: [authGuard]
   },
+  
   {
     path: 'novo-produto',
     component: CreateProductComponent,

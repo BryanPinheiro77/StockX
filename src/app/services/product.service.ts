@@ -39,11 +39,20 @@ export class ProductService {
   }
 
   // Adiciona produto sem o campo id (Firestore gera)
-  async add(product: Omit<Product, 'id'>): Promise<void> {
-    const userId = await this.getUserId();
-    const produtosRef = collection(this.firestore, `usuarios/${userId}/produtos`);
-    await addDoc(produtosRef, product);
-  }
+ async add(product: Omit<Product, 'id'>): Promise<void> {
+  const userId = await this.getUserId();
+  const produtosRef = collection(this.firestore, `usuarios/${userId}/produtos`);
+  
+  await addDoc(produtosRef, {
+    name: product.name,
+    code: product.code ?? '',        // <-- aqui, passando explicitamente o code
+    price: product.price,
+    cost: product.cost ?? 0,
+    category: product.category ?? '',
+    quantity: product.quantity ?? 0
+  });
+}
+
 
   // Busca produto por id
   async getProductById(id: string): Promise<Product | undefined> {

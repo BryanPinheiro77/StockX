@@ -6,9 +6,11 @@ import { Auth, authState } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HomeComponent],
+  imports: [RouterOutlet, HomeComponent, FormsModule, ReactiveFormsModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -22,7 +24,7 @@ export class AppComponent implements OnInit {
     private firestore: Firestore,
     private router: Router
   ) {
-    this.user$ = authState(this.auth); // IMPORTANTE: usar authState como função e passar a instância do auth
+    this.user$ = authState(this.auth);
   }
 
   ngOnInit() {

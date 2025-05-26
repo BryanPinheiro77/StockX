@@ -1,0 +1,35 @@
+.autocomplete-list {
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  background: white;
+  padding: 0;
+  margin-top: 4px;
+  list-style: none;
+
+  li {
+    padding: 8px;
+    cursor: pointer;
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+}
+
+.item-bloco {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #fafafa;
+}
+
+.resumo {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+button {
+  margin: 5px;
+}

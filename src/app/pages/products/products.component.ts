@@ -10,13 +10,13 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-products',
   standalone: true,
   imports: [CommonModule, FormsModule, NavbarComponent],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.css']
 })
-export class HomeComponent implements OnInit {
+export class ProductsComponent implements OnInit {
   resumo = { totalItens: 0, totalValor: 0 };
   produtos: Product[] = [];
   produtosFiltrados: Product[] = [];
@@ -124,10 +124,6 @@ export class HomeComponent implements OnInit {
   abrirCriarProduto() {
     this.router.navigate(['/novo-produto']);
   }
-
-  irParaProdutos() {
-  this.router.navigate(['/produtos']);
-}
 
   exibirMensagem(texto: string, tipo: 'normal' | 'alerta' = 'normal', duracaoMs: number = 2500) {
     this.mensagemFlutuante = texto;
