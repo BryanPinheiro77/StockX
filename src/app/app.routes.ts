@@ -8,6 +8,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { NovaCategoriaComponent } from './pages/nova-categoria/nova-categoria.component';
 import { ProductsComponent } from './pages/products/products.component';
+import { VendaComponent } from './pages/venda/venda.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -24,6 +25,12 @@ export const routes: Routes = [
     {
     path: 'produtos',
     component: ProductsComponent,
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'venda',
+    component: VendaComponent,
     canActivate: [authGuard]
   },
 

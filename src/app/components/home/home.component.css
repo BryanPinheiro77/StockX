@@ -73,6 +73,7 @@ body {
 .sidebar nav ul li button.link-estilo {
   all: unset; /* reseta estilos padrões do botão */
   color: #e5e7eb;
+  text-decoration: none;
   font-size: 18px;
   font-weight: 600;
   display: block;
@@ -444,6 +445,52 @@ border: 1px solid #ccc;
 width: 250px;
 }
 
+/* Container geral do gráfico */
+app-meta-mensal {
+  display: block;
+  max-width: 100%;
+  padding: 20px;
+  margin-left: 200px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  margin-top: 30px;
+  animation: fadeSlideUp 0.5s ease forwards;
+}
+
+/* Título dentro do componente (se houver) */
+app-meta-mensal h2, app-meta-mensal h3 {
+  font-family: 'Segoe UI', sans-serif;
+  color: #1f2937;
+  font-weight: 700;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+/* Ajuste do canvas do gráfico (exemplo usando Chart.js) */
+app-meta-mensal canvas {
+  width: 100% !important;
+  height: 320px !important;
+  max-width: 700px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 12px;
+  background: #f9fafb;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+}
+
+/* Container para legenda personalizada (se usar) */
+app-meta-mensal .chart-legend {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 14px;
+  color: #555;
+}
+
 
 @media (max-width: 768px) {
   .btn-primary, .btn-secondary {
@@ -594,5 +641,18 @@ width: 250px;
   .btn-primary,
   .btn-secondary {
     width: 100%;
+  }
+
+   app-meta-mensal canvas {
+    height: 250px !important;
+  }
+  
+  app-meta-mensal {
+    padding: 15px;
+    margin-top: 20px;
+  }
+  
+  app-meta-mensal h2, app-meta-mensal h3 {
+    font-size: 20px;
   }
 }

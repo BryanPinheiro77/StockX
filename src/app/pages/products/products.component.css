@@ -70,6 +70,26 @@ body {
   transform: scale(1.05);
 }
 
+  .sidebar nav ul li button.link-estilo {
+  all: unset; /* reseta estilos padrões do botão */
+  color: #e5e7eb;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  display: block;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar nav ul li button.link-estilo:hover {
+  background-color: #374151;
+  transform: scale(1.05);
+}
+
 .main-content {
   flex-grow: 1;
   padding: 40px 40px 40px 300px;

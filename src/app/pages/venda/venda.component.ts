@@ -9,17 +9,19 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { Router } from '@angular/router';
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-venda',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule, 
-    ZXingScannerModule
+    ReactiveFormsModule,
+    ZXingScannerModule,
+    NavbarComponent
   ],
   templateUrl: './venda.component.html',
-  styleUrls: ['./venda.component.scss']
+  styleUrls: ['./venda.component.css']
 })
 export class VendaComponent implements OnInit {
 
@@ -31,7 +33,7 @@ export class VendaComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
-      private router: Router,
+    private router: Router,
     private vendaService: VendaService
   ) {}
 
@@ -157,14 +159,38 @@ export class VendaComponent implements OnInit {
   }
 
   onCodeScanned(code: string): void {
-  const produtoEncontrado = this.produtos.find(p => p.id === code);
-  if (produtoEncontrado) {
-    const index = this.itens.length - 1;
-    this.selecionarProduto(produtoEncontrado, index);
-    this.mostrarScanner = false;
-  } else {
-    alert('Produto não encontrado com este código.');
+    const produtoEncontrado = this.produtos.find(p => p.id === code);
+    if (produtoEncontrado) {
+      const index = this.itens.length - 1;
+      this.selecionarProduto(produtoEncontrado, index);
+      this.mostrarScanner = false;
+    } else {
+      alert('Produto não encontrado com este código.');
+    }
   }
-}
+
+  editarProduto(produto: Product) {
+    this.router.navigate(['/editar-produto', produto.id]);
+  }
+
+  abrirDashboard() {
+    this.router.navigate(['']);
+  }
+
+  abrirNovaCategoria() {
+    this.router.navigate(['/nova-categoria']);
+  }
+
+  abrirCriarProduto() {
+    this.router.navigate(['/novo-produto']);
+  }
+
+  irParaProdutos() {
+    this.router.navigate(['/produtos']);
+  }
+
+  irParaVendas() {
+    this.router.navigate(['/venda']);
+  }
 
 }

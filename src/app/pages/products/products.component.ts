@@ -116,6 +116,10 @@ export class ProductsComponent implements OnInit {
     this.router.navigate(['/editar-produto', produto.id]);
   }
 
+  abrirDashboard() {
+    this.router.navigate(['']);
+  }
+
   abrirNovaCategoria() {
   // Pode abrir modal ou navegar para página /categoria-nova
   this.router.navigate(['/nova-categoria']);
@@ -124,6 +128,14 @@ export class ProductsComponent implements OnInit {
   abrirCriarProduto() {
     this.router.navigate(['/novo-produto']);
   }
+
+  irParaProdutos() {
+  this.router.navigate(['/produtos']);
+}
+
+irParaVendas() {
+  this.router.navigate(['/venda']);
+}
 
   exibirMensagem(texto: string, tipo: 'normal' | 'alerta' = 'normal', duracaoMs: number = 2500) {
     this.mensagemFlutuante = texto;

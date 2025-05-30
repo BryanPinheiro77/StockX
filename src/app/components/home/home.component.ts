@@ -9,10 +9,13 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 
+import { collection, getDocs } from 'firebase/firestore';
+import { MetaMensalComponent } from '../meta-mensal/meta-mensal.component';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent],
+  imports: [CommonModule, FormsModule, NavbarComponent, MetaMensalComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -116,6 +119,10 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/editar-produto', produto.id]);
   }
 
+  abrirDashboard() {
+    this.router.navigate(['']);
+  }
+
   abrirNovaCategoria() {
   // Pode abrir modal ou navegar para página /categoria-nova
   this.router.navigate(['/nova-categoria']);
@@ -127,6 +134,10 @@ export class HomeComponent implements OnInit {
 
   irParaProdutos() {
   this.router.navigate(['/produtos']);
+}
+
+irParaVendas() {
+  this.router.navigate(['/venda']);
 }
 
   exibirMensagem(texto: string, tipo: 'normal' | 'alerta' = 'normal', duracaoMs: number = 2500) {
