@@ -273,81 +273,83 @@ button[type="submit"]:disabled {
 }
 
 
-/* Responsividade */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .layout-container {
+    flex-direction: column;
+    padding-bottom: 60px; /* espaço para o menu no rodapé */
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 20px 15px;
+  }
+
   form {
-    padding: 25px 20px;
+    width: 100%;
+    padding: 20px 15px;
+    box-sizing: border-box;
   }
 
   .item-bloco {
-    padding: 16px 18px;
+    padding: 14px;
+    font-size: 14px;
   }
 
   .item-bloco label {
     font-size: 13px;
   }
 
-  .item-bloco input {
+  .item-bloco input,
+  select {
     font-size: 14px;
+    padding: 10px;
   }
 
-  button[type="submit"], form > button[type="button"] {
-    font-size: 16px;
-    padding: 12px 20px;
+  button[type="submit"],
+  form > button[type="button"] {
+    font-size: 15px;
+    padding: 12px 16px;
+    width: 100%;
   }
 
-    /* Sidebar vira menu horizontal no rodapé */
+  .resumo {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  /* Sidebar como barra inferior */
   .sidebar {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    top: auto !important; /* anula qualquer 'top: 0' anterior */
+    top: auto;
+    bottom: 0;
+    left: 0;
     width: 100%;
     height: 60px;
-    padding: 0;
-    display: flex;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
-    background-color: #1f2937;
-    z-index: 1000;
+    justify-content: center;
+    padding: 0;
   }
 
-  /* Logo desaparece para economizar espaço */
   .sidebar .logo {
     display: none;
   }
 
-  /* Menu vira horizontal, sem lista padrão */
   .sidebar nav ul {
     display: flex;
-    gap: 20px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
+    justify-content: space-around;
     width: 100%;
-    justify-content: center;
+    margin: 0;
+    padding: 0;
   }
 
-  /* Itens do menu lado a lado, sem margem vertical */
   .sidebar nav ul li {
     margin: 0;
   }
 
-  /* Links com tamanho menor e centralizados verticalmente */
-  .sidebar nav ul li a {
+  .sidebar nav ul li button.link-estilo {
     font-size: 14px;
-    padding: 10px 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0;
-    transition: background-color 0.3s, transform 0.2s;
-  }
-
-  /* Ajuste do hover para versão mobile */
-  .sidebar nav ul li a:hover {
-    background-color: #374151;
-    transform: none;
+    padding: 10px 6px;
+    text-align: center;
+    width: 100%;
   }
 }
