@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartData, ChartType } from 'chart.js';
 import { Firestore, collection, getDocs, doc, getDoc, Timestamp } from '@angular/fire/firestore';
-import { inject } from '@angular/core';
-import { Auth, getAuth } from '@angular/fire/auth';
+import { getAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-meta-mensal',
@@ -36,23 +35,37 @@ export class MetaMensalComponent implements OnInit {
     this.atualizarGrafico();
   }
 
- async carregarMeta() {
-  try {
-    const configRef = doc(this.firestore, 'configuracoes/usuarioAtual');
-    const snapshot = await getDoc(configRef);
-    this.metaMensal = snapshot.exists() ? snapshot.data()['metaMensal'] : 10000;
-  } catch (err) {
-    console.error('Erro ao carregar meta:', err);
+  async carregarMeta() {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error('Usuário não autenticado.');
+        return;
+      }
+
+      // Aqui usamos user.uid, que está definido
+      const configRef = doc(this.firestore, `usuarios/${user.uid}/configuracoes/${user.uid}`);
+      const snapshot = await getDoc(configRef);
+
+      this.metaMensal = snapshot.exists() ? snapshot.data()['metaMensal'] : 10000;
+      this.atualizarGrafico();
+
+    } catch (err) {
+      console.error('Erro ao carregar meta:', err);
+    }
   }
-}
+
   async calcularVendasDoMes() {
     const auth = getAuth();
-  const user = auth.currentUser;
+    const user = auth.currentUser;
 
-  if (!user) {
-    console.error('Usuário não autenticado.');
-    return;
-  }
+    if (!user) {
+      console.error('Usuário não autenticado.');
+      return;
+    }
+
     const hoje = new Date();
     const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
     const vendasRef = collection(this.firestore, `usuarios/${user.uid}/vendas`);
@@ -68,17 +81,18 @@ export class MetaMensalComponent implements OnInit {
         this.totalVendas += venda['total'];
       }
     });
+
+    this.atualizarGrafico();
   }
 
- atualizarGrafico() {
-  const restante = Math.max(this.metaMensal - this.totalVendas, 0);
-  this.chartData = {
-    ...this.chartData,
-    datasets: [{
-      data: [this.totalVendas, restante],
-      backgroundColor: ['#4CAF50', '#FF5252']
-    }]
-  };
-}
-
+  atualizarGrafico() {
+    const restante = Math.max(this.metaMensal - this.totalVendas, 0);
+    this.chartData = {
+      ...this.chartData,
+      datasets: [{
+        data: [this.totalVendas, restante],
+        backgroundColor: ['#4CAF50', '#FF5252']
+      }]
+    };
+  }
 }

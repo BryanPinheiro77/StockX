@@ -9,6 +9,8 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { NovaCategoriaComponent } from './pages/nova-categoria/nova-categoria.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { VendaComponent } from './pages/venda/venda.component';
+import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.component';
+import { AlterarEmailComponent } from './pages/alterar-email/alterar-email.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -25,6 +27,18 @@ export const routes: Routes = [
     {
     path: 'produtos',
     component: ProductsComponent,
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'configurações',
+    component: ConfiguracoesComponent,
+    canActivate: [authGuard]
+  },
+
+   {
+    path: 'alterar-email',
+    component: AlterarEmailComponent,
     canActivate: [authGuard]
   },
 

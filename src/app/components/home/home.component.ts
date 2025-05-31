@@ -140,6 +140,9 @@ irParaVendas() {
   this.router.navigate(['/venda']);
 }
 
+irParaConfiguracoes() {
+  this.router.navigate(['/configurações']);
+}
   exibirMensagem(texto: string, tipo: 'normal' | 'alerta' = 'normal', duracaoMs: number = 2500) {
     this.mensagemFlutuante = texto;
     this.tipoMensagem = tipo;

@@ -108,31 +108,47 @@ export class VendaComponent implements OnInit {
     }, 0);
   }
 
-  finalizarVenda(): void {
-    if (this.vendaForm.invalid) {
-      alert('Formulário inválido, preencha todos os campos corretamente!');
-      return;
+  async finalizarVenda(): Promise<void> {
+  if (this.vendaForm.invalid) {
+    alert('Formulário inválido, preencha todos os campos corretamente!');
+    return;
+  }
+
+  const venda = {
+    formaPagamento: this.vendaForm.value.formaPagamento,
+    itens: this.vendaForm.value.itens,
+    total: this.calcularTotal(),
+    data: new Date()
+  };
+
+  try {
+    // Verificação de estoque antes de salvar a venda
+    for (const item of venda.itens) {
+      const produtoEstoque = this.produtos.find(p => p.id === item.codigo);
+      if (produtoEstoque) {
+        const quantidadeVendida = Number(item.quantidade);
+
+        if (produtoEstoque.quantity < quantidadeVendida) {
+          alert(`Estoque insuficiente para o produto ${produtoEstoque.name}.`);
+          return;
+        }
+      }
     }
 
-    const venda = {
-      formaPagamento: this.vendaForm.value.formaPagamento,
-      itens: this.vendaForm.value.itens,
-      total: this.calcularTotal(),
-      data: new Date()
-    };
+    // Aqui o serviço já atualiza o estoque corretamente
+    await this.vendaService.salvarVenda(venda);
 
-    this.vendaService.salvarVenda(venda)
-      .then(() => {
-        alert('Venda salva com sucesso!');
-        this.vendaForm.reset();
-        this.itens.clear();
-        this.adicionarItem();
-      })
-      .catch(error => {
-        console.error('Erro ao salvar venda:', error);
-        alert('Erro ao salvar a venda. Tente novamente.');
-      });
+    alert('Venda salva e estoque atualizado com sucesso!');
+    this.vendaForm.reset();
+    this.itens.clear();
+    this.adicionarItem();
+
+  } catch (error) {
+    console.error('Erro ao salvar venda ou atualizar estoque:', error);
+    alert('Erro ao salvar a venda ou atualizar o estoque. Tente novamente.');
   }
+}
+
 
   toggleScanner(): void {
     this.mostrarScanner = !this.mostrarScanner;
@@ -191,6 +207,10 @@ export class VendaComponent implements OnInit {
 
   irParaVendas() {
     this.router.navigate(['/venda']);
+  }
+
+  irParaConfiguracoes() {
+    this.router.navigate(['/configurações']);
   }
 
 }
