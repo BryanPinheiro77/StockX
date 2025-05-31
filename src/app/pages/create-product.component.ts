@@ -113,7 +113,7 @@ export class CreateProductComponent implements OnDestroy, AfterViewInit {
   }
 
   voltar() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/produtos']);
   }
 
   exibirMensagem(texto: string, tipo: 'normal' | 'alerta' = 'normal', duracaoMs: number = 2500) {

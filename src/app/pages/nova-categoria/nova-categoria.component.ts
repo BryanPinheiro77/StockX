@@ -36,7 +36,7 @@ export class NovaCategoriaComponent {
   }
 
   cancelar() {
-  this.router.navigate(['/']);
+  this.router.navigate(['/produtos']);
 }
 
 }
