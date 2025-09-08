@@ -105,7 +105,7 @@ export class CreateProductComponent implements OnDestroy, AfterViewInit {
 
       await this.productService.add(this.produto);
       this.exibirMensagem('Produto criado com sucesso!');
-      setTimeout(() => this.router.navigate(['/']), 1500);
+      setTimeout(() => this.router.navigate(['/produtos']), 1500);
     } catch (error) {
       console.error('Erro ao salvar produto:', error);
       this.exibirMensagem('Erro ao salvar produto.', 'alerta');

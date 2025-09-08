@@ -75,7 +75,9 @@ export class HomeComponent implements OnInit {
 
   private async carregarConfiguracoes(userId: string) {
     try {
-      const docRefConfig = doc(this.firestore, `configuracoes/${userId}`);
+     const docRefConfig = doc(this.firestore, `usuarios/${userId}/configuracoes/${userId}`);
+
+
       const snapshotConfig = await getDoc(docRefConfig);
       if (snapshotConfig.exists()) {
         const dataConfig = snapshotConfig.data();

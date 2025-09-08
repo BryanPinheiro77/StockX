@@ -14,6 +14,22 @@ body {
   margin: 0;
 }
 
+.mensagem-flutuante {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #333333;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-size: 18px;
+  z-index: 9999;
+  opacity: 0.95;
+  animation: fadeInOut 2.5s ease-in-out;
+}
+
 .layout-container {
   display: flex;
   height: 100vh;
@@ -125,6 +141,33 @@ form {
   display: block;
   color: #3a3a3a;
 }
+
+.scanner-button-container {
+  all: unset;
+  margin-top: 8px;
+  text-align: left;
+}
+
+.scanner-btn {
+  all: unset;
+  background-color: #22c55e !important;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 15px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease !important;
+}
+
+.scanner-btn:hover {
+  background-color: #16a34a !important;
+  transform: scale(1.03);
+}
+
+
 
 .item-bloco input {
   width: 100%;
@@ -352,4 +395,27 @@ button[type="submit"]:disabled {
     text-align: center;
     width: 100%;
   }
+
+  .scanner-button-container {
+  margin-top: 8px;
+  text-align: left;
+}
+
+.scanner-btn {
+  background-color: #22c55e !important;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 205px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease !important;
+}
+
+.scanner-btn:hover {
+  background-color: #16a34a !important;
+  transform: scale(1.03);
+}
 }

@@ -76,7 +76,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let product of produtosFiltrados" [ngClass]="{'estoque-baixo': product.quantity <= 1}">
+          <tr *ngFor="let product of produtosFiltrados" [ngClass]="{'estoque-baixo': product.quantity <= estoqueCritico}">
+
             <td data-label="Code">{{ product.code }}</td>
             <td data-label="Nome">{{ product.name }}</td>
             <td data-label="Quantidade">{{ product.quantity }}</td>

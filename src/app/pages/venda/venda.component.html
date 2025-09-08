@@ -13,20 +13,26 @@
 
   <main class="main-content">
     <form [formGroup]="vendaForm" (ngSubmit)="finalizarVenda()">
-
       <div formArrayName="itens">
         <div *ngFor="let item of itens.controls; let i = index" [formGroupName]="i" class="item-bloco">
           <label>Nome do Produto:</label>
-          <input type="text" formControlName="nome" placeholder="Digite ou selecione" />
+          <input type="text" formControlName="nome" placeholder="Digite ou selecione"
+       (focus)="onCampoNomeFocado(i)" autocomplete="off" />
 
-          <ul *ngIf="produtosFiltrados[i] | async as sugestoes">
-            <li *ngFor="let produto of sugestoes" (click)="selecionarProduto(produto, i)">
-              {{ produto.name }} - {{ produto.code || produto.id }}
-            </li>
-          </ul>
 
-          <label for="codigo">Código do produto</label>
-          <input type="text" formControlName="codigo" placeholder="Digite ou escaneie o código" />
+          <ul *ngIf="mostrarSugestoes(i) && (produtosFiltrados[i] | async) as sugestoes" class="autocomplete-list">
+  <li *ngFor="let produto of sugestoes" (click)="selecionarProduto(produto, i)">
+    {{ produto.name }} - {{ produto.code || produto.id }}
+  </li>
+</ul>
+  <label>Código do produto:</label>
+    <input type="text" formControlName="codigo" placeholder="Digite ou escaneie o código" />
+     <div class="scanner-button-container">
+      <button type="button" class="scanner-btn" (click)="toggleScanner()">
+    {{ mostrarScanner ? 'Fechar Scanner' : 'Abrir Scanner' }}
+  </button>
+</div>
+
 
           <label>Quantidade:</label>
           <input type="number" formControlName="quantidade" min="1" />
@@ -44,6 +50,23 @@
 
       <button type="button" (click)="adicionarItem()">+ Adicionar item</button>
 
+      <div class="scanner-container">
+        <zxing-scanner 
+          *ngIf="mostrarScanner"
+          [device]="currentDevice ?? undefined"
+          [formats]="allowedFormats"
+          [enable]="scannerRunning"
+          (camerasFound)="camerasFound($event)"
+          (scanSuccess)="onCodeScanned($event)"
+          (permissionResponse)="onHasPermission($event)"
+          (scanError)="onScanError($event)"
+        ></zxing-scanner>
+
+        <div *ngIf="mostrarScanner && !scannerRunning && hasPermission" class="scanner-loading">
+          <p>Iniciando scanner...</p>
+        </div>
+      </div>
+
       <label>Forma de Pagamento:</label>
       <select formControlName="formaPagamento">
         <option value="">Selecione</option>
@@ -52,9 +75,7 @@
         <option value="Dinheiro">Dinheiro</option>
       </select>
 
-      <div class="resumo">
-        <p><strong>Total:</strong> R$ {{ calcularTotal() | number: '1.2-2' }}</p>
-      </div>
+      <h3>Total: R$ {{ calcularTotal() | number: '1.2-2' }}</h3>
 
       <button type="submit" [disabled]="vendaForm.invalid">Finalizar Venda</button>
     </form>
