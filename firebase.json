@@ -1,7 +1,10 @@
 {
   "hosting": {
+    "site": "stockx-bbac4",
     "public": "dist/stockx",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+    "rewrites": [
+      { "source": "**", "destination": "/index.html" }
+    ]
   }
 }
