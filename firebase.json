@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/stockx",
+    "public": "dist/stockx/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
