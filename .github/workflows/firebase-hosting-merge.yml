@@ -7,7 +7,6 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,17 +22,27 @@ jobs:
       - name: Build (Angular prod)
         run: npm run build -- --configuration production
 
-      - name: Debug dist (ver onde saiu o index.html)
+      - name: Debug dist (onde está o index.html?)
         run: |
           echo "== dist ==" && ls -la dist || true
           echo "== dist/stockx ==" && ls -la dist/stockx || true
           echo "== dist/stockx/browser ==" && ls -la dist/stockx/browser || true
           echo "== dist/crud-pi ==" && ls -la dist/crud-pi || true
+          echo "== firebase.json ==" && cat firebase.json
 
-      - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_STOCKX_BBAC4 }}'
-          channelId: live
-          projectId: stockx-bbac4
+      # 🔁 Deploy via CLI (usa seu firebase.json e a pasta 'public')
+      - name: Install Firebase CLI
+        run: npm i -g firebase-tools
+
+      - name: Auth with service account
+        env:
+          FIREBASE_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_STOCKX_BBAC4 }}
+        run: |
+          echo "$FIREBASE_SA" > $HOME/firebase-sa.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/firebase-sa.json" >> $GITHUB_ENV
+
+      - name: Deploy Hosting (live)
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
+        run: |
+          firebase deploy --only hosting --project stockx-bbac4 --non-interactive
