@@ -30,7 +30,6 @@ jobs:
           echo "== dist/crud-pi ==" && ls -la dist/crud-pi || true
           echo "== firebase.json ==" && cat firebase.json
 
-      # 🔁 Deploy via CLI (usa seu firebase.json e a pasta 'public')
       - name: Install Firebase CLI
         run: npm i -g firebase-tools
 
@@ -40,9 +39,14 @@ jobs:
         run: |
           echo "$FIREBASE_SA" > $HOME/firebase-sa.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/firebase-sa.json" >> $GITHUB_ENV
+          firebase --version
+          firebase projects:list
+          firebase hosting:sites:list --project stockx-bbac4
 
-      - name: Deploy Hosting (live)
+      - name: Deploy Hosting (live - site explícito)
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
         run: |
-          firebase deploy --only hosting --project stockx-bbac4 --non-interactive
+          firebase deploy --only hosting:stockx-bbac4 --project stockx-bbac4 --non-interactive
+          echo "Live URL: https://stockx-bbac4.web.app"
+          echo "Alt URL : https://stockx-bbac4.firebaseapp.com"
