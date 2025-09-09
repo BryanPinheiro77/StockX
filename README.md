@@ -68,17 +68,12 @@ http://localhost:4200
 
 ---
 
-## 📸 Demonstração  
-*(adicione prints ou GIFs do sistema rodando aqui)*  
-
----
 
 ## 📌 Status do Projeto  
 ✔ Funcional – em desenvolvimento contínuo  
 🔜 Próximas features:  
-- CRUD de fornecedores  
-- Tela de configurações (meta mensal, estoque mínimo, etc.)  
-- Cadastro simples de clientes  
+- Relatorios com datas personalizadas 
+- Exportação de relatórios em csv  
 
 ---
 
