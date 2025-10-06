@@ -15,6 +15,10 @@ Ele permite cadastrar produtos, controlar estoque, registrar vendas (com múltip
 
 Criado para simular um sistema de gestão comercial moderno, ajudando a treinar boas práticas de front-end e integração em tempo real com banco de dados na nuvem.  
 
+🔗 **Veja o sistema online:**  
+👉 [Acesse o StockX no ar](https://bryanpinheiro77.github.io/StockX/)
+
+
 ---
 
 ## ✨ Funcionalidades  
