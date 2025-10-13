@@ -1,4 +1,6 @@
-<div class="layout-container">
+<body>
+  
+><div class="layout-container">
   <aside class="sidebar">
     <h2 class="logo">StockX</h2>
     <nav>
@@ -26,12 +28,13 @@
   </li>
 </ul>
   <label>Código do produto:</label>
-    <input type="text" formControlName="codigo" placeholder="Digite ou escaneie o código" />
-     <div class="scanner-button-container">
-      <button type="button" class="scanner-btn" (click)="toggleScanner()">
+<div class="codigo-container">
+  <input type="text" formControlName="codigo" placeholder="Digite ou escaneie o código" />
+  <button type="button" class="scanner-btn" (click)="toggleScanner()">
     {{ mostrarScanner ? 'Fechar Scanner' : 'Abrir Scanner' }}
   </button>
 </div>
+
 
 
           <label>Quantidade:</label>
@@ -81,3 +84,4 @@
     </form>
   </main>
 </div>
+</body>
